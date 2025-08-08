@@ -18,12 +18,15 @@ struct ContentView: View {
     @State private var newBirthday = Date.now
     var body: some View {
         NavigationStack{
-            List(friends) {friend in
-                HStack{
-                    Text(friend.name)
-                    Spacer()
-                    Text(friend.birthday, format: .dateTime.month(.wide).day().year())
-                }//end HStack
+            List{
+               ForEach (friends) {friend in
+                    HStack{
+                        Text(friend.name)
+                        Spacer()
+                        Text(friend.birthday, format: .dateTime.month(.wide).day().year())
+                    }//end HStack
+                }//end ForEach loop
+               .onDelete(perform: deleteFriend)
             }//end list
             .navigationTitle("Birthdays")
             .safeAreaInset(edge:.bottom){
@@ -48,6 +51,12 @@ struct ContentView: View {
             }//end safeAreaInset
         }//end NavStack
     }//end body
+    func deleteFriend(at offsets: IndexSet) {
+        for index in offsets {
+            let friendToDelete = friends[index]
+            context.delete(friendToDelete)
+        }//ends for loop
+    }//ends deleteFriend function
 }//end struct
 
 #Preview {
